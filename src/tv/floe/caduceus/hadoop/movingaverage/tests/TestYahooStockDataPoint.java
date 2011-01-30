@@ -6,19 +6,13 @@ import org.junit.Test;
 
 import tv.floe.caduceus.hadoop.movingaverage.YahooStockDataPoint;
 
-//import tv.floe.caduceus.hadoop.jobs.findpairs.YahooStockDataPoint;
-
 public class TestYahooStockDataPoint {
 
 	@Test
 	public void testParse() {
 		
-		// exchange,stock_symbol,date,open,high,low,close,volume,adj close
 		String test_line = "NYSE,ZZ,2006-04-17,16.67,16.75,16.0,16.1,1440500,15.47";
-		
-		// NYSE,AA,2/15/08,36.38,36.64,35.58,36.55,12834300,36.55
-
-		
+				
 		YahooStockDataPoint o = YahooStockDataPoint.parse(test_line);
 		
 		System.out.println( "symbol: " + o.stock_symbol );

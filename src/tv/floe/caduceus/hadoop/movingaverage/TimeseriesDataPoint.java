@@ -16,7 +16,7 @@ import org.apache.hadoop.io.Writable;
  * @author jpatterson
  *
  */
-public class TimeseriesDataPoint  implements Writable {
+public class TimeseriesDataPoint  implements Writable, Comparable<TimeseriesDataPoint> {
 //, Comparable
 	public long lDateTime;
 	public float fValue;
@@ -97,6 +97,26 @@ public class TimeseriesDataPoint  implements Writable {
 		out.writeFloat( this.fValue );
 		
 		
+	}
+
+	
+	/**
+	 * This is only used in the case of manually sorting the data in the reducer
+	 * 
+	 * Map Reduce itself does not use this method for sorting the data.
+	 * 
+	 */
+	@Override
+	public int compareTo(TimeseriesDataPoint oOther) {
+		// TODO Auto-generated method stub
+  		if ( this.lDateTime < oOther.lDateTime ) {
+   			return -1;
+   		} else if ( this.lDateTime > oOther.lDateTime ) {
+   			return 1;
+   		}
+   		
+   		// default -- they are equal
+   		return 0;
 	}	
  	
 	
