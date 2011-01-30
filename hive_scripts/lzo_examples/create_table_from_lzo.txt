@@ -1,1 +1,12 @@
-commands here...
+CREATE TABLE my_lzo_staging_table (
+
+	col_A STRING,
+	col_B STRING,
+	col_C STRING,
+	col_D STRING
+	
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY Ô,Õ
+STORED AS
+INPUTFORMAT 'com.hadoop.mapred.DeprecatedLzoTextInputFormat'
+OUTPUTFORMAT 'org.apache.hadoop.mapred.SequenceFileOutputFormat';
