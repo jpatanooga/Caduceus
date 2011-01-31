@@ -35,10 +35,10 @@ public class ReadLZOFileExampleJob extends Configured implements Tool
 		   conf.setJobName( "ReadLZOFileExampleJob" );
 		   
 		   conf.setMapOutputKeyClass( Text.class );
-//		   conf.setMapOutputValueClass( OmegaTrade.class );
+		   conf.setMapOutputValueClass( Text.class );
 
-//		   conf.setMapperClass( TradeMapper.class );        
-//		   conf.setReducerClass( TradeReducer.class );
+		   conf.setMapperClass( ReadLZOFileMapper.class );        
+		   conf.setReducerClass( ReadLZOFileReducer.class );
 		 
 	   
 		   boolean bLZO = false;
