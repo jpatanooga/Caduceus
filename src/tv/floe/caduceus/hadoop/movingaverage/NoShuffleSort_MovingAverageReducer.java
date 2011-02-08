@@ -24,7 +24,7 @@ import org.apache.hadoop.mapred.Reporter;
  * 
  */
 
-public class NoShuffleSort_MovingAverageReducer   extends MapReduceBase implements Reducer<TimeseriesKey, TimeseriesDataPoint, Text, Text> {
+public class NoShuffleSort_MovingAverageReducer   extends MapReduceBase implements Reducer<Text, TimeseriesDataPoint, Text, Text> {
 
 	static enum PointCounters { POINTS_SEEN, POINTS_ADDED_TO_WINDOWS, MOVING_AVERAGES_CALCD };
 	
@@ -38,7 +38,7 @@ public class NoShuffleSort_MovingAverageReducer   extends MapReduceBase implemen
     	
     } // configure()		
 	
-	 public void reduce(TimeseriesKey key, Iterator<TimeseriesDataPoint> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
+	 public void reduce(Text key, Iterator<TimeseriesDataPoint> values, OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
 
 	       	TimeseriesDataPoint next_point;
 	    	float point_sum = 0;
@@ -68,6 +68,8 @@ public class NoShuffleSort_MovingAverageReducer   extends MapReduceBase implemen
 	    		
         		next_point = values.next();
         		
+        		// we need to copy the points into new objects since MR re-uses k/v pairs
+        		// to avoid GC churn
         		TimeseriesDataPoint point_copy = new TimeseriesDataPoint();
         			point_copy.copy(next_point);
         		
@@ -102,7 +104,7 @@ public class NoShuffleSort_MovingAverageReducer   extends MapReduceBase implemen
 
         			// ---------- compute the moving average here -----------
 	    			
-	    			out_key.set( "Group: " + key.getGroup() + ", Date: " +  strBackDate );
+	    			out_key.set( "Group: " + key.toString() + ", Date: " +  strBackDate );
 	    			
 	    			point_sum = 0;
 

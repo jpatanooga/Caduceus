@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 //import tv.floe.caduceus.hadoop.movingaverage.MovingAverageMapper.Timeseries_Counters;
 
-public class NoShuffleSort_MovingAverageMapper  extends MapReduceBase implements Mapper<LongWritable, Text, TimeseriesKey, TimeseriesDataPoint> 
+public class NoShuffleSort_MovingAverageMapper  extends MapReduceBase implements Mapper<LongWritable, Text, Text, TimeseriesDataPoint> 
 {
 
 	   
@@ -21,7 +21,7 @@ public class NoShuffleSort_MovingAverageMapper  extends MapReduceBase implements
 
 	   
 	   private JobConf configuration;
-	   private final TimeseriesKey key = new TimeseriesKey();
+	   private final Text key = new Text();
 	   private final TimeseriesDataPoint val = new TimeseriesDataPoint();
 	   
 
@@ -43,7 +43,7 @@ public class NoShuffleSort_MovingAverageMapper  extends MapReduceBase implements
 	   
 	   
 	   @Override
-	   public void map(LongWritable inkey, Text value, OutputCollector<TimeseriesKey, TimeseriesDataPoint> output, Reporter reporter) throws IOException {
+	   public void map(LongWritable inkey, Text value, OutputCollector<Text, TimeseriesDataPoint> output, Reporter reporter) throws IOException {
 
 	      String line = value.toString();
 	      
@@ -52,7 +52,7 @@ public class NoShuffleSort_MovingAverageMapper  extends MapReduceBase implements
 	      if (rec != null) {
 	    	  
 	    		  // set both parts of the key
-	    		  key.set( rec.stock_symbol, rec.date );
+	    		  key.set( rec.stock_symbol );
 	    	      
 	    		  val.fValue = rec.getAdjustedClose();
 	    	      val.lDateTime = rec.date;

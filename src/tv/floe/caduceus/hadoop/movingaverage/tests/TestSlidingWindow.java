@@ -4,7 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
 
+import org.apache.hadoop.io.Text;
 import org.junit.Test;
 
 import tv.floe.caduceus.hadoop.movingaverage.SlidingWindow;
@@ -163,6 +166,110 @@ public class TestSlidingWindow {
 		System.out.println( "window delta? " + window.GetWindowDelta() );
 		
 		System.out.println( "window full? " + window.WindowIsFull() );
+		
+	}
+	
+	@Test
+	public void testSimpleMovingAverage() {
+		
+		
+       	TimeseriesDataPoint next_point;
+    	float point_sum = 0;
+    	float moving_avg = 0;
+
+    	// make static
+    	long day_in_ms = 24 * 60 * 60 * 1000;
+    	
+
+    	// should match the width of your training samples sizes
+    	int iWindowSizeInDays = 2; //this.configuration.getInt("tv.floe.examples.mr.sax.windowSize", 30 );
+    	int iWindowStepSizeInDays = 1; //this.configuration.getInt("tv.floe.examples.mr.sax.windowStepSize", 1 );
+
+    	long iWindowSizeInMS = iWindowSizeInDays * day_in_ms; // = this.configuration.getInt("tv.floe.examples.mr.sax.windowSize", 14 );
+    	long iWindowStepSizeInMS = iWindowStepSizeInDays * day_in_ms; // = this.configuration.getInt("tv.floe.examples.mr.sax.windowStepSize", 7 );
+    	
+    	
+ //   	Text out_key = new Text();
+ //   	Text out_val = new Text();
+
+		SlidingWindow sliding_window = new SlidingWindow( iWindowSizeInMS, iWindowStepSizeInMS, day_in_ms );
+		
+		PriorityQueue<TimeseriesDataPoint> oPointHeapNew = new PriorityQueue<TimeseriesDataPoint>();
+
+		TimeseriesDataPoint p_copy_0 = new TimeseriesDataPoint();
+		p_copy_0.fValue = 0;
+		p_copy_0.lDateTime = ParseDate( "2008-02-01" );
+
+		oPointHeapNew.add(p_copy_0);
+		
+		
+		TimeseriesDataPoint p_copy_1 = new TimeseriesDataPoint();
+		p_copy_1.fValue = 1;
+		p_copy_1.lDateTime = ParseDate( "2008-02-02" );
+    		
+    		oPointHeapNew.add(p_copy_1);
+
+    		
+    		TimeseriesDataPoint p_copy_2 = new TimeseriesDataPoint();
+    		p_copy_2.fValue = 2;
+    		p_copy_2.lDateTime = ParseDate( "2008-02-03" );
+        		
+        		oPointHeapNew.add(p_copy_2);
+    		
+
+		while ( oPointHeapNew.isEmpty() == false ) {
+    	
+			//reporter.incrCounter( PointCounters.POINTS_ADDED_TO_WINDOWS, 1 );
+			
+			next_point = oPointHeapNew.poll();
+			
+			try {
+				sliding_window.AddPoint(next_point);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+    		if ( sliding_window.WindowIsFull() ) {
+    			
+    			//reporter.incrCounter( PointCounters.MOVING_AVERAGES_CALCD, 1 );
+    			System.out.println( "calc'ing SMA --------- " );
+    					        			
+    			LinkedList<TimeseriesDataPoint> oWindow = sliding_window.GetCurrentWindow();
+    			
+    			String strBackDate = oWindow.getLast().getDate();
+
+    			// ---------- compute the moving average here -----------
+    			
+    			//out_key.set( "Group: " + key.getGroup() + ", Date: " +  strBackDate );
+    			
+    			point_sum = 0;
+
+    			for ( int x = 0; x < oWindow.size(); x++ ) {
+    				
+    				point_sum += oWindow.get(x).fValue;
+    				
+    			} // for
+    			
+    			moving_avg = point_sum / oWindow.size();
+    			
+    			System.out.println("Moving Average: " + moving_avg );
+    			
+    			//output.collect( out_key, out_val );
+					
+    			
+    			// 2. step window forward
+    			
+    			sliding_window.SlideWindowForward();
+    			
+    		}
+  		
+    		
+		
+		}
+		
+		
 		
 	}
 	
