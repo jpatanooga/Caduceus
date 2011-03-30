@@ -5,5 +5,13 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="/Users/jpatterson/Downloads/hadoop-0.20.2+737/hadoop-core-0.20.2+737.jar"/>
 	<classpathentry kind="lib" path="/Users/jpatterson/Downloads/hadoop-0.20.2+737/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="/Users/jpatterson/Documents/git_test/Caduceus/lib/mahout-core-0.4.jar"/>
+	<classpathentry kind="lib" path="/Users/jpatterson/Documents/git_test/Caduceus/lib/hadoop-lzo-0.4.3.jar"/>
+	<classpathentry kind="lib" path="/Users/jpatterson/Downloads/hadoop-0.20.2+737/lib/slf4j-api-1.4.3.jar"/>
+	<classpathentry kind="lib" path="/Users/jpatterson/Downloads/hadoop-0.20.2+737/lib/slf4j-log4j12-1.4.3.jar"/>
+	<classpathentry kind="lib" path="/Users/jpatterson/Documents/git_test/Caduceus/lib/google-collections-1.0-rc2.jar"/>
+	<classpathentry kind="lib" path="/Users/jpatterson/Documents/workspace/mahout-0.4/utils/target/dependency/commons-math-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/jpatterson/Documents/workspace/mahout-0.4/utils/target/dependency/uncommons-maths-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/jpatterson/Documents/workspace/mahout-0.4/math/target/mahout-math-0.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -19,6 +19,8 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 
+import com.hadoop.mapred.DeprecatedLzoTextInputFormat;
+
 /**
  * Simple job that takes LZO input text and creates gzipped sequence files
  * 
