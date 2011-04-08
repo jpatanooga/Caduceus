@@ -38,9 +38,9 @@
 		<copy todir="${build.lib.dir}">
 			<fileset dir="${lib.dir}"/>
 		</copy>
-		<copy todir="${build.dir}/bin">
+<!--		<copy todir="${build.dir}/bin">
 			<fileset dir="bin"/>
-		</copy>
+		</copy>-->
 		<delete dir="${tmp.dir}"/>
 	</target>
 
