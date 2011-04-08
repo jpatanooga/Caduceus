@@ -24,31 +24,71 @@ import org.apache.hadoop.util.ToolRunner;
  * From here we wire together the Map, Reduce, Partition, and Writable classes.
  * 
  * @author jpatterson
- *
+ * 
  */
 public class MovingAverageJob extends Configured implements Tool {
-	
 
-	   @Override
-	   public int run(String[] args) throws Exception {
+	@Override
+	public int run(String[] args) throws Exception {
 
-		   System.out.println( "\n\nMovingAverageJob\n" );
-		   
-		   
-		   JobConf conf = new JobConf( getConf(), MovingAverageJob.class );
-		   conf.setJobName( "MovingAverageJob" );
-		   
-		   conf.setMapOutputKeyClass( TimeseriesKey.class );
-		   conf.setMapOutputValueClass( TimeseriesDataPoint.class );
+		System.out.println("\n\nMovingAverageJob\n");
 
-		   conf.setMapperClass( MovingAverageMapper.class );        
-		   conf.setReducerClass( MovingAverageReducer.class );
-		 
-		   conf.setPartitionerClass( NaturalKeyPartitioner.class );
-		   conf.setOutputKeyComparatorClass( CompositeKeyComparator.class );
-		   conf.setOutputValueGroupingComparator( NaturalKeyGroupingComparator.class );
-	   
-		   
+		JobConf conf = new JobConf(getConf(), MovingAverageJob.class);
+		conf.setJobName("MovingAverageJob");
+
+		conf.setMapOutputKeyClass(TimeseriesKey.class);
+		conf.setMapOutputValueClass(TimeseriesDataPoint.class);
+
+		conf.setMapperClass(MovingAverageMapper.class);
+		conf.setReducerClass(MovingAverageReducer.class);
+
+		conf.setPartitionerClass(NaturalKeyPartitioner.class);
+		conf.setOutputKeyComparatorClass(CompositeKeyComparator.class);
+		conf.setOutputValueGroupingComparator(NaturalKeyGroupingComparator.class);
+
+/*		
+		List<String> other_args = new ArrayList<String>();
+		for (int i = 0; i < args.length; ++i) {
+			try {
+				if ("-m".equals(args[i])) {
+
+					conf.setNumMapTasks(Integer.parseInt(args[++i]));
+
+				} else if ("-r".equals(args[i])) {
+
+					conf.setNumReduceTasks(Integer.parseInt(args[++i]));
+
+				} else if ("-windowSize".equals(args[i])) {
+
+					conf.set("tv.floe.caduceus.hadoop.movingaverage.windowSize", args[++i]);
+
+				} else if ("-windowStepSize".equals(args[i])) {
+
+					conf.set("tv.floe.caduceus.hadoop.movingaverage.windowStepSize", args[++i]);
+
+				} else {
+
+					other_args.add(args[i]);
+
+				}
+			} catch (NumberFormatException except) {
+				System.out.println("ERROR: Integer expected instead of "
+						+ args[i]);
+				return printUsage();
+			} catch (ArrayIndexOutOfBoundsException except) {
+				System.out.println("ERROR: Required parameter missing from "
+						+ args[i - 1]);
+				return printUsage();
+			}
+		}
+		// Make sure there are exactly 2 parameters left.
+		if (other_args.size() != 2) {
+			System.out.println("ERROR: Wrong number of parameters: "
+					+ other_args.size() + " instead of 2.");
+			return printUsage();
+		}
+*/
+		
 		   List<String> other_args = new ArrayList<String>();
 		   for(int i=0; i < args.length; ++i) {
 		     try {
@@ -60,13 +100,7 @@ public class MovingAverageJob extends Configured implements Tool {
 		       	
 		         conf.setNumReduceTasks(Integer.parseInt(args[++i]));
 		    	   
-		       } else if ("-windowSize".equals(args[i]) ) {
 		    	   
-		    	   conf.set( "tv.floe.examples.mr.sax.windowSize", args[++i] );
-		    	   
-		       } else if ("-windowStepSize".equals(args[i]) ) {
-		    	   
-		    	   conf.set( "tv.floe.examples.mr.sax.windowStepSize", args[++i] );
 		    	   		    	   
 		       } else {
 		       	
@@ -88,38 +122,34 @@ public class MovingAverageJob extends Configured implements Tool {
 		                        other_args.size() + " instead of 2.");
 		     return printUsage();
 		   }
-		   
-		   conf.setInputFormat( TextInputFormat.class );
-			   
-		   conf.setOutputFormat(TextOutputFormat.class);
-		   conf.setCompressMapOutput(true);	   
-		   
-		   
-		   FileInputFormat.setInputPaths( conf, other_args.get(0) );
-		   FileOutputFormat.setOutputPath( conf, new Path(other_args.get(1)) );
-		   
-		   		   
-		   JobClient.runJob(conf);
-		   
-		   return 0;
-	   }
-	   
-		 
+		   		
 		
-		 static int printUsage() {
-		   System.out.println("MovingAverageJob [-m <maps>] [-r <reduces>] <input> <output>");
-		   ToolRunner.printGenericCommandUsage(System.out);
-		   return -1;
-		 }
+		conf.setInputFormat(TextInputFormat.class);
 
-	   
-		 public static void main(String[] args) throws Exception {
-		   
-			int res = ToolRunner.run( new Configuration(), new MovingAverageJob(), args );
-		    System.exit(res);
-		 
-		 }
-	   	  
-	
+		conf.setOutputFormat(TextOutputFormat.class);
+		conf.setCompressMapOutput(true);
+
+		FileInputFormat.setInputPaths(conf, other_args.get(0));
+		FileOutputFormat.setOutputPath(conf, new Path(other_args.get(1)));
+
+		JobClient.runJob(conf);
+
+		return 0;
+	}
+
+	static int printUsage() {
+		System.out
+				.println("MovingAverageJob [-m <maps>] [-r <reduces>] <input> <output>");
+		ToolRunner.printGenericCommandUsage(System.out);
+		return -1;
+	}
+
+	public static void main(String[] args) throws Exception {
+
+		int res = ToolRunner.run(new Configuration(), new MovingAverageJob(),
+				args);
+		System.exit(res);
+
+	}
 
 }

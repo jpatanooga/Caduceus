@@ -67,7 +67,7 @@ public class ClusteringDemoPointFileWriter {
 		
 		for (int i = 0; i < raw.length; i++) {
 			double[] fr = raw[i];
-			Vector vec = new RandomAccessSparseVector( 2, fr.length );// "vector: " + String.valueOf(i), fr.length);
+			Vector vec = null; //new RandomAccessSparseVector( 2, fr.length );// "vector: " + String.valueOf(i), fr.length);
 			vec.assign(fr); 
 			points.add(vec);
 		} 

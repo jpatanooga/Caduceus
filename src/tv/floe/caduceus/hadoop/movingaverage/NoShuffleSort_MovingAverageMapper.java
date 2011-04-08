@@ -11,8 +11,6 @@ import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 import org.apache.log4j.Logger;
 
-//import tv.floe.caduceus.hadoop.movingaverage.MovingAverageMapper.Timeseries_Counters;
-
 public class NoShuffleSort_MovingAverageMapper  extends MapReduceBase implements Mapper<LongWritable, Text, Text, TimeseriesDataPoint> 
 {
 
@@ -34,7 +32,6 @@ public class NoShuffleSort_MovingAverageMapper  extends MapReduceBase implements
 	   }
 	   
 	   public void configure(JobConf conf) {
-	      //logger.info("GenerateSAXSegments_s1_Mapper.configure()");
 	      this.configuration = conf;
 	      
 	   }

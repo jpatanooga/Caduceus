@@ -59,7 +59,6 @@ public class SlidingWindow {
 	public long GetWindowDelta() {
 		
 		if ( this.oCurrentWindow.size() > 0 ) {
-			//return this.oCurrentWindow.getFirst().CalcDeltaInMS( this.oCurrentWindow.getLast() );
 			return this.oCurrentWindow.getLast().lDateTime - this.oCurrentWindow.getFirst().lDateTime + this._lSampleSize;
 		}
 		
@@ -101,7 +100,6 @@ public class SlidingWindow {
 		
 		// now burn off the tail
 		
-		//while ( this.oCurrentWindow.getFirst().GetCalendar().getTimeInMillis() < this._lCurrentTime ) {
 		while ( this.oCurrentWindow.getFirst().lDateTime < this._lCurrentTime ) {
 
 			this.oCurrentWindow.removeFirst();
